@@ -1,25 +1,18 @@
 import {CORE_CONCEPTS} from "./data.js";
+import {EXAMPLES} from "./data.js";
 import {Header} from "./components/Header.jsx";
 import CoreConcept from "./components/CoreConcept.jsx";
 import TabButton from "./components/TabButton";
+import {useState} from "react";
 
-function handleSelect(selectedButton){
-    switch(selectedButton){
-        case "Components":
-            document.getElementById("DynamicContent").innerHTML = "Components";
-            break;
-        case "JSX":
-            document.getElementById("DynamicContent").innerHTML = "JSX";
-            break;
-        case "Props":
-            document.getElementById("DynamicContent").innerHTML = "Props";
-            break;
-        case "State":
-            document.getElementById("DynamicContent").innerHTML = "State";
-            break;
-    }
-}
+
 function App() {
+    const [selectedExample, setSelectedExample] = useState();
+
+    function handleSelect(selectedButton){
+        setSelectedExample(selectedButton);
+    }
+
   return (
     <div>
       <Header></Header>
@@ -36,12 +29,19 @@ function App() {
           <section id="examples">
               <h2>Examples</h2>
               <menu>
-                  <TabButton onSelect={() => handleSelect("Components")}>Components</TabButton>
-                  <TabButton onSelect={() => handleSelect("JSX")}>JSX</TabButton>
-                  <TabButton onSelect={() => handleSelect("Props")}>Props</TabButton>
-                  <TabButton onSelect={() => handleSelect("State")}>State</TabButton>
+                  <TabButton isSelected={selectedExample === "components"} onSelect={() => handleSelect("components")}>Components</TabButton>
+                  <TabButton isSelected={selectedExample === "jsx"} onSelect={() => handleSelect("jsx")}>JSX</TabButton>
+                  <TabButton isSelected={selectedExample === "props"} onSelect={() => handleSelect("props")}>Props</TabButton>
+                  <TabButton isSelected={selectedExample === "state"} onSelect={() => handleSelect("state")}>State</TabButton>
               </menu>
-              <p id="DynamicContent">Please select an example</p>
+
+                  {!selectedExample ? <p>Please select a topic.</p> : (<div id="tab-content">
+                      <h3>{EXAMPLES[selectedExample].title}</h3>
+                      <p>{EXAMPLES[selectedExample].description}</p>
+                      <pre>
+                      <code>{EXAMPLES[selectedExample].code}</code>
+                  </pre>
+                  </div>)}
           </section>
       </main>
     </div>
